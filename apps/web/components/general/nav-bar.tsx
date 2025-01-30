@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Sourcegraph from '../logo';
 import { Button } from '../ui/button';
 import { ThemeToggle } from './toggle-theme';
+import { SignInButton } from '../auth/signin-button';
 
 export function NavBar() {
   return (
@@ -13,11 +14,9 @@ export function NavBar() {
         </div>
 
         <div className="flex items-center gap-4">
-          <Link href="/auth/sign-in">
-            <Button variant="outline" className="dark:border-[1px] dark:border-lime-300">
-              Login
-            </Button>
-          </Link>
+          <SignInButton>
+            <Button className="font-medium text-white">Login</Button>
+          </SignInButton>
 
           <ThemeToggle />
         </div>
