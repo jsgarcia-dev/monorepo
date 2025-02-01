@@ -1,52 +1,51 @@
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+'use client';
 
-export function SignInForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
+import { AuthForm } from './auth-form';
+import { CardWrapper } from './card-wrapper';
+import { loginSchema, LoginFormData } from '@/schemas';
+import { Mail, Lock } from 'lucide-react';
+
+type Field = {
+  name: 'email' | 'password';
+  label: string;
+  type: string;
+  placeholder: string;
+  icon: React.ReactNode;
+  showForgotPassword?: boolean;
+};
+
+const loginFields: Field[] = [
+  {
+    name: 'email',
+    label: 'Email',
+    type: 'email',
+    placeholder: 'john.doe@example.com',
+    icon: <Mail className="h-4 w-4" />,
+  },
+  {
+    name: 'password',
+    label: 'Password',
+    type: 'password',
+    placeholder: '••••••••',
+    showForgotPassword: true,
+    icon: <Lock className="h-4 w-4" />,
+  },
+];
+
+export const SignInForm = () => {
+  const onSubmit = (data: LoginFormData) => {
+    console.log(data);
+  };
+
   return (
-    <div className={cn('flex flex-col gap-6', className)} {...props}>
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>Enter your email below to login to your account</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form>
-            <div className="flex flex-col gap-6">
-              <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="m@example.com" required />
-              </div>
-              <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                  <a
-                    href="#"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                  >
-                    Forgot your password?
-                  </a>
-                </div>
-                <Input id="password" type="password" required />
-              </div>
-              <Button type="submit" className="w-full">
-                Login
-              </Button>
-              <Button variant="outline" className="w-full">
-                Login with Google
-              </Button>
-            </div>
-            <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{' '}
-              <a href="#" className="underline underline-offset-4">
-                Sign up
-              </a>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
+    <CardWrapper
+      headerLabel="Welcome back"
+      headerDescription="Enter your email and password to sign in to your account"
+      backButtonLabel="Don't have an account? Sign up"
+      backButtonHref="/auth/sign-up"
+      showSocial={true}
+    >
+      <AuthForm fields={loginFields} onSubmit={onSubmit} schema={loginSchema} buttonText="Entrar" />
+    </CardWrapper>
   );
-}
+};

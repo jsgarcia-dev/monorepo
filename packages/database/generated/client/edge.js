@@ -167,7 +167,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/julio/dev/monorepo/packages/database/generated/client",
+      "value": "/home/Julio/dev/monorepo/packages/database/generated/client",
       "fromEnvVar": null
     },
     "config": {
@@ -176,12 +176,12 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "debian-openssl-3.0.x",
+        "value": "debian-openssl-1.1.x",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/home/julio/dev/monorepo/packages/database/prisma/schema.prisma",
+    "sourceFilePath": "/home/Julio/dev/monorepo/packages/database/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
