@@ -1,21 +1,29 @@
 'use server';
 
-import { FormData, registerSchema } from '@/schemas';
+import { registerSchema } from '@/schemas';
 
-export const register = async (data: FormData) => {
+export type RegisterResponse = {
+  error?: string;
+  success?: string;
+};
+
+export async function RegisterAuth(
+  prevState: RegisterResponse | null,
+  formData: FormData
+): Promise<RegisterResponse> {
+  const data = {
+    name: formData.get('name'),
+    email: formData.get('email'),
+    password: formData.get('password'),
+  };
+
   const validatedFields = registerSchema.safeParse(data);
 
   if (!validatedFields.success) {
     return { error: 'Invalid fields' };
   }
 
-  const { name, email, password } = validatedFields.data;
+  console.log('VALIDATED DATA:', validatedFields.data);
 
-  console.log('VALIDATED DATA:', {
-    name,
-    email,
-    password,
-  });
-
-  return { success: true };
-};
+  return { success: 'Conta criada com sucesso!' };
+}

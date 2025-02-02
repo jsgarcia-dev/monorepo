@@ -1,62 +1,93 @@
 'use client';
 
-import { AuthForm } from './auth-form';
-import { CardWrapper } from './card-wrapper';
-import { registerSchema } from '@/schemas';
+import { cn } from '@/lib/utils';
+import { useActionState, useEffect } from 'react';
+import Link from 'next/link';
+
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import Sourcegraph from '../logo';
 import { Mail, Lock, User } from 'lucide-react';
-import { FormData } from '@/schemas';
-import { register } from '@/_actions/auth/register';
-import { useTransition } from 'react';
+import { RegisterAuth } from '@/_actions/auth/register';
+import FormError from './form-error';
+import FormSuccess from './form-success';
+import { useRouter } from 'next/navigation';
 
-const registerFields = [
-  {
-    name: 'name' as const,
-    label: 'Name',
-    type: 'text',
-    placeholder: 'John Doe',
-    icon: <User className="h-4 w-4" />,
-  },
-  {
-    name: 'email' as const,
-    label: 'Email',
-    type: 'email',
-    placeholder: 'john.doe@example.com',
-    icon: <Mail className="h-4 w-4" />,
-  },
-  {
-    name: 'password' as const,
-    label: 'Password',
-    type: 'password',
-    placeholder: '••••••••',
-    icon: <Lock className="h-4 w-4" />,
-  },
-];
+export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
+  const router = useRouter();
+  const [formState, formAction, isPending] = useActionState(RegisterAuth, null);
 
-export const SignUpForm = () => {
-  const [isPending, startTransition] = useTransition();
+  useEffect(() => {
+    if (formState?.success) {
+      const timeout = setTimeout(() => {
+        router.push('/auth/sign-in');
+      }, 1000);
 
-  const onSubmit = (data: FormData) => {
-    startTransition(async () => {
-      const result = await register(data);
-      console.log('REGISTER RESULT:', result);
-    });
-  };
+      return () => clearTimeout(timeout);
+    }
+  }, [formState?.success, router]);
 
   return (
-    <CardWrapper
-      headerLabel="Create an account"
-      headerDescription="Enter your details to create your account"
-      backButtonLabel="Already have an account? Sign in"
-      backButtonHref="/auth/sign-in"
-      showSocial={false}
-    >
-      <AuthForm
-        fields={registerFields}
-        onSubmit={onSubmit}
-        schema={registerSchema}
-        isPending={isPending}
-        buttonText="Create account"
-      />
-    </CardWrapper>
+    <div className={cn('flex flex-col gap-6', className)} {...props}>
+      <Card className="w-[450px]">
+        <CardHeader className="items-center justify-center">
+          <Sourcegraph className="h-12 w-12" />
+          <CardTitle className="text-2xl">Crie sua conta</CardTitle>
+          <CardDescription>Preencha os dados abaixo para se registrar</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form action={formAction}>
+            <div className="mt-4 flex flex-col gap-6">
+              <div className="grid gap-2">
+                <Label htmlFor="name">Nome</Label>
+                <div className="relative">
+                  <User className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
+                  <Input id="name" name="name" placeholder="Seu nome completo" className="pl-10" />
+                </div>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="email">Email</Label>
+                <div className="relative">
+                  <Mail className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="m@exemplo.com"
+                    className="pl-10"
+                  />
+                </div>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="password">Senha</Label>
+                <div className="relative">
+                  <Lock className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
+                  <Input
+                    id="password"
+                    name="password"
+                    type="password"
+                    placeholder="********"
+                    className="pl-10"
+                  />
+                </div>
+              </div>
+              {formState?.success && <FormSuccess message={formState.success} />}
+              {formState?.error && <FormError message={formState.error} />}
+              <Button type="submit" className="w-full">
+                {isPending ? 'Criando conta...' : 'Criar conta'}
+              </Button>
+            </div>
+            <div className="mt-5 text-center text-sm">
+              Já tem uma conta?{' '}
+              <Link href="/auth/sign-in" className="underline underline-offset-4">
+                Entrar
+              </Link>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
   );
-};
+}
