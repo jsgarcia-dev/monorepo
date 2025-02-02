@@ -77,7 +77,7 @@ export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutR
               {formState?.error && <FormError message={formState.error} />}
               <Button
                 type="submit"
-                className="w-full bg-emerald-600 text-white hover:bg-emerald-700"
+                className="custom:bg-emerald-600 custom:text-white custom:hover:bg-emerald-700 w-full"
               >
                 {isPending ? 'Criando conta...' : 'Criar conta'}
               </Button>

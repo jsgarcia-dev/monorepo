@@ -1,7 +1,6 @@
 import Sourcegraph from '../logo';
-import { Button } from '../ui/button';
+
 import { ThemeToggle } from './toggle-theme';
-import { SignInButton } from '../auth/login-button';
 
 export function NavBar() {
   return (
@@ -13,9 +12,7 @@ export function NavBar() {
         </div>
 
         <div className="flex items-center gap-4">
-          <SignInButton>
-            <Button className="font-medium">Entrar</Button>
-          </SignInButton>
+          <span>Entrar</span>
 
           <ThemeToggle />
         </div>
