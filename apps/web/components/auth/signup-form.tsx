@@ -77,14 +77,17 @@ export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutR
               {formState?.error && <FormError message={formState.error} />}
               <Button
                 type="submit"
-                className="custom:bg-emerald-600 custom:text-white custom:hover:bg-emerald-700 w-full"
+                className="custom:bg-lime-500/80 custom:text-white custom:font-medium custom:hover:bg-lime-500/40 w-full text-sm"
               >
                 {isPending ? 'Criando conta...' : 'Criar conta'}
               </Button>
             </div>
             <div className="mt-5 text-center text-sm">
               Já tem uma conta?{' '}
-              <Link href="/auth/sign-in" className="underline underline-offset-4">
+              <Link
+                href="/auth/sign-in"
+                className="custom:text-lime-500 underline underline-offset-4"
+              >
                 Entrar
               </Link>
             </div>

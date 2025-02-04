@@ -1,4 +1,5 @@
 import Sourcegraph from '../logo';
+import { Button } from '../ui/button';
 
 import { ThemeToggle } from './toggle-theme';
 
@@ -12,7 +13,7 @@ export function NavBar() {
         </div>
 
         <div className="flex items-center gap-4">
-          <span>Entrar</span>
+          <Button className="custom:bg-lime-500 custom:text-lime-50">Entrar</Button>
 
           <ThemeToggle />
         </div>
