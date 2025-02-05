@@ -2,7 +2,7 @@
 
 import { prisma } from '@repo/database';
 import { registerSchema } from '@/schemas';
-import bcrypt from 'bcrypt';
+import bcryptjs from 'bcryptjs';
 import { getUserByEmail } from '@/data/user';
 
 export type RegisterResponse = {
@@ -27,7 +27,7 @@ export async function RegisterAuth(
   }
 
   const { name, email, password } = validatedFields.data;
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const hashedPassword = await bcryptjs.hash(password, 10);
 
   const existingUser = await getUserByEmail(email);
 
@@ -44,8 +44,6 @@ export async function RegisterAuth(
   });
 
   // TODO: Send verification token email
-
-  console.log('VALIDATED DATA:', validatedFields.data);
 
   return { success: 'Conta criada com sucesso!' };
 }

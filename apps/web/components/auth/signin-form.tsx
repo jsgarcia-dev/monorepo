@@ -1,3 +1,5 @@
+'use client';
+
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,8 +10,14 @@ import Sourcegraph from '../logo';
 import { Separator } from '../ui/separator';
 import { Mail, Lock } from 'lucide-react';
 import Link from 'next/link';
+import { useActionState } from 'react';
+import { SigninAuth } from '@/_actions/auth/signin-actions';
+import FormError from './form-error';
+import FormSuccess from './form-success';
 
 export function SignInForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
+  const [formState, formAction, isPending] = useActionState(SigninAuth, null);
+
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>
       <Card className="w-[450px]">
@@ -19,7 +27,7 @@ export function SignInForm({ className, ...props }: React.ComponentPropsWithoutR
           <CardDescription>Enter your email below to login to your account</CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form action={formAction}>
             <div className="mt-4 flex flex-col gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
@@ -27,6 +35,7 @@ export function SignInForm({ className, ...props }: React.ComponentPropsWithoutR
                   <Mail className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
                   <Input
                     id="email"
+                    name="email"
                     type="email"
                     placeholder="m@example.com"
                     required
@@ -48,6 +57,7 @@ export function SignInForm({ className, ...props }: React.ComponentPropsWithoutR
                   <Lock className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
                   <Input
                     id="password"
+                    name="password"
                     type="password"
                     required
                     className="pl-10"
@@ -55,9 +65,10 @@ export function SignInForm({ className, ...props }: React.ComponentPropsWithoutR
                   />
                 </div>
               </div>
-              {/* FormMessage  */}
+              {formState?.error && <FormError message={formState.error} />}
+              {formState?.success && <FormSuccess message={formState.success} />}
               <Button type="submit" className="w-full">
-                Login
+                {isPending ? 'Signing in...' : 'Sign in'}
               </Button>
               <div className="-mb-3 flex items-center justify-center overflow-hidden">
                 <Separator className="bg-muted-foreground my-4" />
