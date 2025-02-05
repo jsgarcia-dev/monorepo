@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Sourcegraph from '../logo';
 import { Mail, Lock, User } from 'lucide-react';
-import { RegisterAuth } from '@/_actions/auth/register';
+import { RegisterAuth } from '@/_actions/auth/signup-actions';
 import FormError from './form-error';
 import FormSuccess from './form-success';
 import { useRouter } from 'next/navigation';
