@@ -67,7 +67,10 @@ export function SignInForm({ className, ...props }: React.ComponentPropsWithoutR
               </div>
               {formState?.error && <FormError message={formState.error} />}
               {formState?.success && <FormSuccess message={formState.success} />}
-              <Button type="submit" className="w-full">
+              <Button
+                type="submit"
+                className="custom:text-white custom:font-medium w-full bg-lime-500 text-sm hover:bg-lime-500/60"
+              >
                 {isPending ? 'Signing in...' : 'Sign in'}
               </Button>
               <div className="-mb-3 flex items-center justify-center overflow-hidden">
@@ -79,7 +82,7 @@ export function SignInForm({ className, ...props }: React.ComponentPropsWithoutR
             </div>
             <div className="mt-5 text-center text-sm">
               Don&apos;t have an account?{' '}
-              <Link href="/auth/sign-up" className="underline underline-offset-4">
+              <Link href="/auth/sign-up" className="text-lime-500 underline underline-offset-4">
                 Sign up
               </Link>
             </div>

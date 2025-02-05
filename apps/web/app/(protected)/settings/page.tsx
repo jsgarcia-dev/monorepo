@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 export default async function SettingsPage() {
   const session = await auth();
   return (
-    <div>
+    <div className="flex flex-col gap-4 p-12">
       Settings Page
       <pre>{JSON.stringify(session)}</pre>
       <form
