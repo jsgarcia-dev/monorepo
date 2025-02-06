@@ -6,6 +6,22 @@ import authConfig from '@/auth.config';
 import { getUserById } from '@/data/user';
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
+  pages: {
+    signIn: '/auth/sign-in',
+    error: '/auth/error',
+  },
+  events: {
+    async linkAccount({ user }) {
+      await prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          emailVerified: new Date(),
+        },
+      });
+    },
+  },
   callbacks: {
     // TODO FEAT: Implementar a verificação de email no login
     // async signIn({ user }) {

@@ -14,8 +14,14 @@ import { useActionState } from 'react';
 import { SigninAuth } from '@/_actions/auth/signin-actions';
 import FormError from './form-error';
 import FormSuccess from './form-success';
+import { useSearchParams } from 'next/navigation';
 
 export function SignInForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
+  const searchParams = useSearchParams();
+  const urlError =
+    searchParams.get('error') === 'OAuthAccountNotLinked'
+      ? 'Email already in use with different provider!'
+      : '';
   const [formState, formAction, isPending] = useActionState(SigninAuth, null);
 
   return (
@@ -65,7 +71,9 @@ export function SignInForm({ className, ...props }: React.ComponentPropsWithoutR
                   />
                 </div>
               </div>
-              {formState?.error && <FormError message={formState.error} />}
+              {(formState?.error || urlError) && (
+                <FormError message={formState?.error || urlError} />
+              )}
               {formState?.success && <FormSuccess message={formState.success} />}
               <Button
                 type="submit"
