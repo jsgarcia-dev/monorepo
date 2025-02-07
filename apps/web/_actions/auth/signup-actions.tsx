@@ -4,6 +4,7 @@ import { prisma } from '@repo/database';
 import { registerSchema } from '@/schemas';
 import bcryptjs from 'bcryptjs';
 import { getUserByEmail } from '@/data/user';
+import { generateVerificationToken } from '@/lib/tokens';
 
 export type RegisterResponse = {
   error?: string;
@@ -43,7 +44,10 @@ export async function RegisterAuth(
     },
   });
 
-  // TODO: Send verification token email
+  const verificationToken = await generateVerificationToken(email);
 
-  return { success: 'Conta criada com sucesso!' };
+  return {
+    success:
+      'Conta criada com sucesso, verifique sua caixa de entrada para confirmar seu endereço de e-mail.',
+  };
 }

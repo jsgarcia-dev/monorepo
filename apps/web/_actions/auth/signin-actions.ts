@@ -3,6 +3,8 @@
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
 import { DEFAULT_LOGIN_REDIRECT } from '@/routes';
+import { generateVerificationToken } from '@/lib/tokens';
+import { getUserByEmail } from '@/data/user';
 
 export type SignInResponse = {
   error?: string;
@@ -18,6 +20,22 @@ export async function SigninAuth(
 
   if (!email || !password) {
     return { error: 'Invalid credentials' };
+  }
+
+  const existingUser = await getUserByEmail(email);
+
+  if (!existingUser || !existingUser.email || !existingUser.password) {
+    return { error: 'Email does not exist' };
+  }
+
+  // if (!existingUser.emailVerified) {
+  //   return { error: 'Seu e-mail não foi verificado. Verifique seu e-mail antes de continuar.' };
+  // }
+
+  if (!existingUser.emailVerified) {
+    const verificationToken = await generateVerificationToken(existingUser.email);
+
+    return { success: 'Confirmation email sent!' };
   }
 
   try {

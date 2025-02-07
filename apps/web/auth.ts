@@ -23,13 +23,21 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     },
   },
   callbacks: {
-    // TODO FEAT: Implementar a verificação de email no login
-    // async signIn({ user }) {
-    //   const existingUser = await getUserById(user.id as string);
+    async signIn({ user, account }) {
+      // Allow OAuth without email verification
+      if (account?.provider !== 'credentials') return true;
 
-    //   if (!existingUser || !existingUser.emailVerified) return false;
-    //   return true;
-    // },
+      if (user.id === undefined) return false;
+
+      const existingUser = await getUserById(user.id);
+
+      // Prevent users from signing in if their email is not verified
+      if (!existingUser?.emailVerified) return false;
+
+      // TODO ADD: add 2FA check
+
+      return true;
+    },
 
     async session({ token, session }) {
       if (token.sub && session.user) {
