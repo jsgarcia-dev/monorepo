@@ -3,8 +3,7 @@
 import { prisma } from '@repo/database';
 import { registerSchema } from '@/schemas';
 import bcryptjs from 'bcryptjs';
-import { getUserByEmail } from '@/data/user';
-import { generateVerificationToken } from '@/lib/tokens';
+import { userService } from '@/services/users.service';
 
 export type RegisterResponse = {
   error?: string;
@@ -15,13 +14,11 @@ export async function RegisterAuth(
   prevState: RegisterResponse | null,
   formData: FormData
 ): Promise<RegisterResponse> {
-  const data = {
+  const validatedFields = registerSchema.safeParse({
     name: formData.get('name'),
     email: formData.get('email'),
     password: formData.get('password'),
-  };
-
-  const validatedFields = registerSchema.safeParse(data);
+  });
 
   if (!validatedFields.success) {
     return { error: 'Invalid fields' };
@@ -30,24 +27,40 @@ export async function RegisterAuth(
   const { name, email, password } = validatedFields.data;
   const hashedPassword = await bcryptjs.hash(password, 10);
 
-  const existingUser = await getUserByEmail(email);
+  const existingUser = await userService.getUserByEmail(email);
 
   if (existingUser) {
     return { error: 'Email já está em uso' };
   }
 
-  await prisma.user.create({
-    data: {
-      name,
-      email,
-      password: hashedPassword,
-    },
-  });
+  try {
+    // Cria o usuário
+    await prisma.user.create({
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+      },
+    });
 
-  const verificationToken = await generateVerificationToken(email);
+    // Chama a API para gerar token e enviar email
+    const response = await fetch('http://localhost:3001/api/verify-email/generate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+    });
 
-  return {
-    success:
-      'Conta criada com sucesso, verifique sua caixa de entrada para confirmar seu endereço de e-mail.',
-  };
+    if (!response.ok) {
+      throw new Error('Oops, algo deu errado. Tente novamente mais tarde.');
+    }
+
+    return {
+      success: 'Conta criada com sucesso, Verifique seu email para ativar sua conta.',
+    };
+  } catch (error) {
+    console.error('Erro ao criar conta:', error);
+    return { error: 'Erro ao criar conta. Tente novamente.' };
+  }
 }

@@ -3,7 +3,7 @@ import { PrismaAdapter } from '@auth/prisma-adapter';
 
 import { prisma, UserRole } from '@repo/database';
 import authConfig from '@/auth.config';
-import { getUserById } from '@/data/user';
+import { userService } from './services/users.service';
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   pages: {
@@ -29,7 +29,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
       if (user.id === undefined) return false;
 
-      const existingUser = await getUserById(user.id);
+      const existingUser = await userService.getUserById(user.id);
 
       // Prevent users from signing in if their email is not verified
       if (!existingUser?.emailVerified) return false;
@@ -52,7 +52,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
     async jwt({ token }) {
       if (!token.sub) return token;
-      const existingUser = await getUserById(token.sub);
+      const existingUser = await userService.getUserById(token.sub);
       if (!existingUser) return token;
 
       token.role = existingUser.role;

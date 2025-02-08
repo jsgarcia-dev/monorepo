@@ -32,6 +32,9 @@ importers:
       '@repo/database':
         specifier: workspace:*
         version: link:../../packages/database
+      '@types/uuid':
+        specifier: ^10.0.0
+        version: 10.0.0
       dotenv:
         specifier: ^16.4.7
         version: 16.4.7
@@ -47,6 +50,12 @@ importers:
       pino-pretty:
         specifier: ^13.0.0
         version: 13.0.0
+      uuid:
+        specifier: ^11.0.5
+        version: 11.0.5
+      zod:
+        specifier: ^3.24.1
+        version: 3.24.1
     devDependencies:
       '@tsconfig/node18':
         specifier: ^18.2.4
