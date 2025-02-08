@@ -1,0 +1,32 @@
+# Dependências instaladas
+node_modules
+
+# Pastas de build/compilação
+dist
+build
+
+# Arquivos de ambiente e configurações sensíveis
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Cache do projeto e ferramentas
+.cache/
+.turbo/
+coverage/
+
+# Gerados pelo sistema operacional/IDE
+.DS_Store
+Thumbs.db
+
+# Outros (ajuste caso necessário)
+/.idea/
+/.vscode/

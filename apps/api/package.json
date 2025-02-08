@@ -1,0 +1,24 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@fastify/sensible": "4.0.0",
+    "@repo/database": "workspace:*",
+    "fastify": "^5.2.1",
+    "fastify-autoload": "3.13.0",
+    "pino-pretty": "^13.0.0"
+  },
+  "devDependencies": {
+    "@tsconfig/node18": "^18.2.4",
+    "@types/node": "^18.0.0",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.0.0",
+    "typescript": "^5.0.0"
+  }
+}
