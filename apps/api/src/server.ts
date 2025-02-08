@@ -3,7 +3,7 @@ import fastifySensible from '@fastify/sensible'
 
 import { FastifyInstance } from 'fastify'
 import { routes } from './routes'
-import { colorizerFactory } from 'pino-pretty'
+import fastifyCors from '@fastify/cors'
 
 export async function startServer(): Promise<FastifyInstance> {
   const fastify = Fastify({
@@ -28,6 +28,11 @@ export async function startServer(): Promise<FastifyInstance> {
         },
       },
     },
+  })
+
+  await fastify.register(fastifyCors, {
+    origin: '*',
+    methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'], // Métodos permitidos
   })
 
   // Plugins e configurações gerais
