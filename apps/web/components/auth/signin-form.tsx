@@ -19,7 +19,7 @@ import { useSearchParams } from 'next/navigation';
 export function SignInForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
   const searchParams = useSearchParams();
   const urlError =
-    searchParams.get('error') === 'OAuthAccountNotLinked'
+    searchParams?.get?.('error') === 'OAuthAccountNotLinked'
       ? 'Email already in use with different provider!'
       : '';
   const [formState, formAction, isPending] = useActionState(SigninAuth, null);

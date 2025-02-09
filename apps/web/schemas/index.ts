@@ -14,4 +14,3 @@ export const registerSchema = z.object({
 export type LoginFormData = z.infer<typeof loginSchema>;
 export type RegisterFormData = z.infer<typeof registerSchema>;
 export type FormData = LoginFormData | RegisterFormData;
-

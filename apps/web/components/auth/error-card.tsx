@@ -1,4 +1,4 @@
-import { ArrowLeft, MoveLeft, TriangleAlert } from 'lucide-react';
+import { ArrowLeft, TriangleAlert } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardFooter } from '../ui/card';
 import Link from 'next/link';
@@ -13,7 +13,7 @@ export default function ErrorCard() {
             <span className="ml-2">Oops! Something went wrong.</span>
           </CardTitle>
           <CardDescription className="text-center">
-            We're working on it and we'll get it fixed as soon as we can.
+            We&apos;re working on it and we&apos;ll get it fixed as soon as we can.
           </CardDescription>
         </CardHeader>
 
