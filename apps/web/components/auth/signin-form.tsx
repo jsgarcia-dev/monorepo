@@ -86,7 +86,7 @@ export function SignInForm({ className, ...props }: React.ComponentPropsWithoutR
                 <span className="px-2 text-sm text-nowrap">Or continue with</span>
                 <Separator className="bg-muted-foreground my-4" />
               </div>
-              <Social />
+              <Social isPending={isPending} />
             </div>
             <div className="mt-5 text-center text-sm">
               Don&apos;t have an account?{' '}

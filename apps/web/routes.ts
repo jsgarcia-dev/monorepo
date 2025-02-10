@@ -1,7 +1,7 @@
 /**
  * Array of public routes that don't require authentication
  */
-export const publicRoutes = ['/'];
+export const publicRoutes = ['/', '/teste', '/auth/verify-email'];
 
 /**
  * An array of routes that are used for authentication These routes will redirect logged in users to /settings
