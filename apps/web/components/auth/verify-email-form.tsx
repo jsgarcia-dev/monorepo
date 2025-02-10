@@ -8,7 +8,7 @@ import { BeatLoader } from 'react-spinners';
 
 interface EmailVerificationProps {
   name?: string;
-  email: string;
+  email?: string;
   resendVerification?: () => void;
   logoComponent?: React.ReactNode;
   className?: string;
