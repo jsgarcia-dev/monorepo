@@ -26,7 +26,7 @@ export const VerifyEmailForm = ({ className }: EmailVerificationProps) => {
           <CardDescription>Enter your email below to login to your account</CardDescription>
         </CardHeader>
         <CardContent className="text-center">
-          <BeatLoader color="#84cc16" size={14} />
+          <BeatLoader color="currentColor" size={14} />
           <Button className="group text-white" variant="ghost">
             <ArrowLeft
               className="opacity-60 transition-transform group-hover:-translate-x-0.5"
