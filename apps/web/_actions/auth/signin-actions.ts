@@ -14,36 +14,28 @@ export async function SigninAuth(
   prevState: SignInResponse | null,
   formData: FormData
 ): Promise<SignInResponse> {
-  const email = formData.get('email') as string;
-  const password = formData.get('password') as string;
+  const email = formData.get('email')?.toString();
+  const password = formData.get('password')?.toString();
 
   if (!email || !password) {
-    return { error: 'Invalid credentials' };
+    return { error: 'Credenciais inválidas' };
   }
 
   const existingUser = await userService.getUserByEmail(email);
-
-  // if (!existingUser || !existingUser.email || !existingUser.password) {
-  //   return { error: 'Oops! Algo deu errado. Tente novamente mais tarde.' };
-  // }
 
   if (!existingUser) {
     return { error: 'Email não encontrado' };
   }
 
-  // Verifica se é usuário OAuth
   if (existingUser.isOAuthUser) {
     return { error: 'Use o login com Google para esta conta' };
   }
 
   if (!existingUser.emailVerified) {
     try {
-      // Chama a API para reenviar email de verificação
       const response = await fetch('http://localhost:3001/api/verify-email/generate', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
       });
 
@@ -58,23 +50,27 @@ export async function SigninAuth(
   }
 
   try {
-    await signIn('credentials', {
+    const result = await signIn('credentials', {
       email,
       password,
-      redirectTo: DEFAULT_LOGIN_REDIRECT,
+      redirect: false,
+      callbackUrl: DEFAULT_LOGIN_REDIRECT,
     });
 
-    return { success: 'Login realizado com sucesso!' };
-  } catch (error) {
-    if (error instanceof AuthError) {
-      switch (error.type) {
-        case 'CredentialsSignin':
-          return { error: 'Credenciais inválidas' };
-        default:
-          return { error: 'Ocorreu um erro' };
-      }
+    if (!result?.error) {
+      return { success: 'Login realizado com sucesso!' };
     }
 
-    throw error;
+    if (result.error === 'CredentialsSignin') {
+      return { error: 'Credenciais inválidas' };
+    }
+
+    return { error: 'Ocorreu um erro na autenticação' };
+  } catch (error) {
+    if (error instanceof AuthError) {
+      return { error: 'Falha na autenticação' };
+    }
+
+    return { error: 'Erro interno do servidor' };
   }
 }

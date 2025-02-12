@@ -1,24 +1,24 @@
-import { VerificationTokenRepository } from '../../repositories/auth/verification-token.repository'
-import { EmailService } from './email.service'
+import { VerificationTokenRepository } from "../../repositories/auth/verification-token.repository";
+import { EmailService } from "./email.service";
 
 export class TokenService {
-  private tokenRepository: VerificationTokenRepository
-  private emailService: EmailService
+  private tokenRepository: VerificationTokenRepository;
+  private emailService: EmailService;
 
   constructor() {
-    this.tokenRepository = new VerificationTokenRepository()
-    this.emailService = new EmailService()
+    this.tokenRepository = new VerificationTokenRepository();
+    this.emailService = new EmailService();
   }
 
   async generateVerificationToken(email: string) {
-    const verificationToken = await this.tokenRepository.create(email)
+    const verificationToken = await this.tokenRepository.create(email);
 
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000'
-    const verificationUrl = `${frontendUrl}/auth/verify-email?token=${verificationToken.token}`
+    const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
+    const verificationUrl = `${frontendUrl}/auth/verify-email?token=${verificationToken.token}`;
 
     await this.emailService.sendEmail({
       to: email,
-      subject: 'Verifique sua conta',
+      subject: "Verifique sua conta",
       html: `
         <!DOCTYPE html>
         <html>
@@ -45,24 +45,24 @@ export class TokenService {
           </body>
         </html>
       `,
-    })
+    });
 
-    return verificationToken
+    return verificationToken;
   }
 
   async verifyToken(token: string) {
-    const verificationToken = await this.tokenRepository.findByToken(token)
+    const verificationToken = await this.tokenRepository.findByToken(token);
 
     if (!verificationToken) {
-      throw new Error('Token inválido ou expirado')
+      throw new Error("Token inválido ou expirado");
     }
 
     if (verificationToken.expires < new Date()) {
-      await this.tokenRepository.delete(verificationToken.id)
-      throw new Error('Token expirado')
+      await this.tokenRepository.delete(verificationToken.id);
+      throw new Error("Token expirado");
     }
 
-    await this.tokenRepository.delete(verificationToken.id)
-    return verificationToken
+    await this.tokenRepository.delete(verificationToken.id);
+    return verificationToken;
   }
 }

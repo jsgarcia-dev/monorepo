@@ -1,8 +1,8 @@
-import { prisma } from '@repo/database'
+import { prisma } from "@repo/database";
 
 export class UserRepository {
   async findAll() {
-    return prisma.user.findMany()
+    return prisma.user.findMany();
   }
 
   async findByEmail(email: string) {
@@ -21,34 +21,31 @@ export class UserRepository {
           },
         },
       },
-    })
+    });
 
-    if (!user) return null
+    if (!user) return null;
 
-    // Se tem accounts, é login social
-    const isOAuthUser = user.accounts.length > 0
+    const isOAuthUser = user.accounts.length > 0;
 
     return {
       ...user,
       isOAuthUser,
-      // Só incluímos o password se não for OAuth
-      password: isOAuthUser ? null : user.password,
-    }
+    };
   }
 
   async findById(id: string) {
     return prisma.user.findUnique({
       where: { id },
-    })
+    });
   }
 
   async create(data: { email: string; name: string; password: string }) {
     return prisma.user.create({
       data: {
         ...data,
-        role: 'USER',
+        role: "USER",
       },
-    })
+    });
   }
 
   async updateEmailVerified(email: string) {
@@ -57,6 +54,6 @@ export class UserRepository {
       data: {
         emailVerified: new Date(),
       },
-    })
+    });
   }
 }
