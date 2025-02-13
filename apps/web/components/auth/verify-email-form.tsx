@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { verifyEmailToken } from '@/_actions/auth/verify-email-actions';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, TriangleAlert, CheckCircle2, Loader2 } from 'lucide-react';
 import Sourcegraph from '../logo';
 import { BeatLoader } from 'react-spinners';
 import Link from 'next/link';
@@ -63,9 +63,17 @@ export function VerifyEmailForm() {
             {status === 'success' && 'Email verificado!'}
             {status === 'error' && 'Falha na verificação'}
           </CardTitle>
-          <CardDescription>{message}</CardDescription>
+          <CardDescription></CardDescription>
         </CardHeader>
         <CardContent className="text-center">
+          <div
+            className={`mt-0 flex items-center justify-center rounded-lg border p-2 text-lg ${status === 'error' ? 'bg-destructive/50 text-white' : status === 'success' ? 'text-green-600' : 'text-muted-foreground'}`}
+          >
+            {status === 'error' && <TriangleAlert size={22} className="mr-2" />}
+            {status === 'success' && <CheckCircle2 size={22} className="mr-2" />}
+            {status === 'loading' && <Loader2 size={22} className="mr-2 animate-spin" />}
+            {message}
+          </div>
           {status === 'loading' && <BeatLoader color="currentColor" size={14} />}
           <Link href="/auth/sign-in">
             <Button className="group mt-4 text-white" variant="ghost">
